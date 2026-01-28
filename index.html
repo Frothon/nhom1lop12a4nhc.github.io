@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thư viện Trực tuyến</title>
+    <title>Thư viện Trường</title>
     <style>
         * {
             margin: 0;
@@ -13,19 +13,34 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Times New Roman', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef3 100%);
+            background-attachment: fixed;
             min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(90deg, transparent, transparent 98px, rgba(139, 38, 53, 0.03) 98px, rgba(139, 38, 53, 0.03) 100px),
+                repeating-linear-gradient(0deg, transparent, transparent 98px, rgba(139, 38, 53, 0.03) 98px, rgba(139, 38, 53, 0.03) 100px);
+            pointer-events: none;
+            z-index: 0;
         }
         
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, #8b2635 0%, #6d1e2a 100%);
+            color: white;
             padding: 20px 0;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 10;
         }
         
         .header-content {
@@ -39,103 +54,59 @@
             gap: 15px;
         }
         
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
-        
         .logo h1 {
-            font-size: 24px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 26px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .user-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
         
         .user-info {
             display: none;
-            align-items: center;
-            gap: 10px;
-            background: #f0f0f0;
+            background: rgba(255, 255, 255, 0.2);
             padding: 8px 15px;
-            border-radius: 25px;
+            border-radius: 5px;
+            backdrop-filter: blur(10px);
         }
         
         .user-info.active {
-            display: flex;
-        }
-        
-        .user-avatar {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
+            display: block;
         }
         
         .btn {
-            padding: 10px 25px;
-            border: none;
-            border-radius: 25px;
+            padding: 8px 16px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
         
-        .btn-login {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-        
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-register {
+        .btn:hover {
             background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-        
-        .btn-register:hover {
-            background: #667eea;
-            color: white;
+            color: #8b2635;
+            transform: translateY(-2px);
         }
         
         .btn-logout {
-            background: #ff4757;
-            color: white;
+            background: white;
+            color: #8b2635;
         }
         
         .container {
             max-width: 1200px;
-            margin: 40px auto;
+            margin: 30px auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
         
         .modal {
@@ -145,250 +116,303 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 100;
         }
         
         .modal.active {
             display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
         
-        .modal-content {
+        .modal-box {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
-            width: 90%;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
             max-width: 450px;
             max-height: 90vh;
             overflow-y: auto;
+            border: 3px solid #8b2635;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            position: relative;
         }
         
         .modal-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            color: #8b2635;
         }
         
         .modal-header h2 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .modal-header p {
-            color: #666;
-            font-size: 14px;
+            font-size: 24px;
+            margin-bottom: 5px;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
+            font-weight: bold;
             color: #333;
-            font-weight: 600;
         }
         
         .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
             font-size: 14px;
-            transition: all 0.3s;
+            transition: border-color 0.3s ease;
         }
         
         .form-group input:focus {
+            border-color: #8b2635;
             outline: none;
-            border-color: #667eea;
         }
         
         .btn-submit {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #8b2635;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 5px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background 0.3s ease;
         }
         
         .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: #6d1e2a;
         }
         
         .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+            float: right;
+            background: #e0e0e0;
+            border: none;
             width: 30px;
             height: 30px;
-            background: #f0f0f0;
-            border: none;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 18px;
-            color: #666;
+            font-size: 20px;
+            transition: background 0.3s ease;
         }
         
-        .modal-footer {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
+        .modal-close:hover {
+            background: #ccc;
         }
         
-        .modal-footer a {
-            color: #667eea;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        
-        .books-section {
+        .section {
             background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e0e0e0;
+            margin-bottom: 20px;
         }
         
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
+        .section-title {
+            color: #8b2635;
+            font-size: 22px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #8b2635;
+            padding-bottom: 10px;
         }
         
-        .section-header h2 {
-            color: #333;
-            font-size: 28px;
+        .rules-section {
+            background: linear-gradient(135deg, #fff9f0 0%, #fff 100%);
+            border: 2px solid #8b2635;
         }
         
-        .search-box {
+        .rules-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .rule-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #8b2635;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .rule-box h3 {
+            color: #8b2635;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .rule-box ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .rule-box li {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .search-bar {
             display: flex;
             gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
-        .search-box input,
-        .search-box select {
-            padding: 10px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+        .search-bar select,
+        .search-bar input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-bar select:focus,
+        .search-bar input:focus {
+            border-color: #8b2635;
+            outline: none;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            min-width: 200px;
         }
         
         .books-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
         }
         
         .book-card {
             background: white;
-            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
         
         .book-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: #8b2635;
         }
         
         .book-cover {
             width: 100%;
-            height: 300px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #2c5f7c, #1a3a4d);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
+            font-size: 40px;
             color: white;
             position: relative;
         }
         
-        .book-category {
+        .book-tag {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #667eea;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: 600;
+            top: 6px;
+            right: 6px;
+            background: white;
+            color: #2c5f7c;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .book-qty {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            background: white;
+            color: #333;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
         }
         
         .book-info {
-            padding: 20px;
+            padding: 12px;
         }
         
         .book-title {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: bold;
             color: #333;
-            margin-bottom: 8px;
-            min-height: 45px;
+            margin-bottom: 4px;
+            min-height: 36px;
+            line-height: 1.3;
         }
         
         .book-author {
-            font-size: 14px;
+            font-size: 11px;
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
         
-        .book-status {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .status-available {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .status-borrowed {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .book-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-action {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+        .book-quantity {
             font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: bold;
         }
         
-        .btn-read {
-            background: #667eea;
-            color: white;
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        
+        .book-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .book-buttons button {
+            flex: 1;
+            padding: 6px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
         
         .btn-borrow {
-            background: #764ba2;
+            background: #8b2635;
             color: white;
+        }
+        
+        .btn-borrow:hover:not(:disabled) {
+            background: #6d1e2a;
+        }
+        
+        .btn-cancel {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: #c82333;
         }
         
         .btn-return {
@@ -396,66 +420,22 @@
             color: white;
         }
         
-        .btn-action:disabled {
-            background: #cccccc;
+        .btn-return:hover {
+            background: #218838;
+        }
+        
+        button:disabled {
+            background: #ccc !important;
             cursor: not-allowed;
-        }
-        
-        .pdf-viewer {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 3000;
-        }
-        
-        .pdf-viewer.active {
-            display: block;
-        }
-        
-        .pdf-header {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .pdf-title {
-            color: white;
-            font-size: 18px;
-        }
-        
-        .pdf-close {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        
-        .pdf-content {
-            height: calc(100% - 60px);
-            padding: 20px;
-        }
-        
-        .pdf-content iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 10px;
+            opacity: 0.6;
         }
         
         .my-books {
             background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
-            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e0e0e0;
             display: none;
         }
         
@@ -468,26 +448,49 @@
         }
         
         .borrowed-item {
-            background: #f8f9fa;
+            background: #f9f9f9;
             padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 10px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .borrowed-item:hover {
+            background: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .borrowed-item h4 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+        
+        .borrowed-item p {
+            font-size: 13px;
+            color: #666;
         }
         
         @media (max-width: 768px) {
             .logo h1 {
-                font-size: 18px;
+                font-size: 20px;
             }
+            
             .books-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 15px;
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             }
-            .book-cover {
-                height: 200px;
-                font-size: 40px;
+            
+            .borrowed-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .rules-content {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -497,312 +500,242 @@
     <div class="header">
         <div class="header-content">
             <div class="logo">
-                <div class="logo-icon">📚</div>
-                <h1>Thư viện Trực tuyến</h1>
+                <h1>📚 THƯ VIỆN TRƯỜNG</h1>
             </div>
             <div class="user-section">
-                <div class="user-info" id="userInfo">
-                    <div class="user-avatar" id="userAvatar"></div>
-                    <span id="userName"></span>
-                </div>
-                <button class="btn btn-register" id="registerBtn">Đăng ký</button>
-                <button class="btn btn-login" id="loginBtn">Đăng nhập</button>
-                <button class="btn btn-logout" id="logoutBtn" style="display:none;">Đăng xuất</button>
+                <span class="user-info" id="userInfo"></span>
+                <button class="btn" id="loginBtn" onclick="showLogin()">Đăng nhập</button>
+                <button class="btn btn-logout" id="logoutBtn" style="display:none;" onclick="logout()">Đăng xuất</button>
             </div>
         </div>
     </div>
 
     <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeLogin">×</button>
+        <div class="modal-box">
+            <button class="modal-close" onclick="hideLogin()">×</button>
             <div class="modal-header">
-                <h2>🔐 Đăng nhập</h2>
-                <p>Đăng nhập để mượn và đọc sách</p>
+                <h2>ĐĂNG NHẬP</h2>
+                <p>Nhập mã số học sinh</p>
             </div>
-            <form id="loginForm">
+            <form onsubmit="login(event)">
                 <div class="form-group">
-                    <label>Tên đăng nhập</label>
-                    <input type="text" id="loginUsername" required>
+                    <label>Mã số học sinh:</label>
+                    <input type="text" id="studentCode" placeholder="VD: HS001" required>
                 </div>
-                <div class="form-group">
-                    <label>Mật khẩu</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                <button type="submit" class="btn-submit">Đăng nhập</button>
+                <button type="submit" class="btn-submit">ĐĂNG NHẬP</button>
             </form>
-            <div class="modal-footer">
-                <p>Chưa có tài khoản? <a id="switchToRegister">Đăng ký ngay</a></p>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeRegister">×</button>
-            <div class="modal-header">
-                <h2>📝 Đăng ký</h2>
-                <p>Tạo tài khoản mới</p>
-            </div>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label>Họ và tên</label>
-                    <input type="text" id="registerName" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="registerEmail" required>
-                </div>
-                <div class="form-group">
-                    <label>Tên đăng nhập</label>
-                    <input type="text" id="registerUsername" required>
-                </div>
-                <div class="form-group">
-                    <label>Mật khẩu</label>
-                    <input type="password" id="registerPassword" required minlength="6">
-                </div>
-                <div class="form-group">
-                    <label>Xác nhận mật khẩu</label>
-                    <input type="password" id="registerConfirm" required>
-                </div>
-                <button type="submit" class="btn-submit">Đăng ký</button>
-            </form>
-            <div class="modal-footer">
-                <p>Đã có tài khoản? <a id="switchToLogin">Đăng nhập</a></p>
-            </div>
-        </div>
-    </div>
-
-    <div class="pdf-viewer" id="pdfViewer">
-        <div class="pdf-header">
-            <div class="pdf-title" id="pdfTitle"></div>
-            <button class="pdf-close" id="closePdf">✕ Đóng</button>
-        </div>
-        <div class="pdf-content">
-            <iframe id="pdfFrame"></iframe>
         </div>
     </div>
 
     <div class="container">
-        <div class="books-section">
-            <div class="section-header">
-                <h2>📖 Thư viện sách</h2>
-                <div class="search-box">
-                    <select id="categoryFilter">
-                        <option value="">Tất cả</option>
-                        <option value="Toán học">Toán học</option>
-                        <option value="Tiếng Anh">Tiếng Anh</option>
-                        <option value="Lịch sử">Lịch sử</option>
-                        <option value="Hình học">Hình học</option>
-                    </select>
-                    <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm...">
+        <div class="section rules-section">
+            <h2 class="section-title">📋 NỘI QUY THƯ VIỆN</h2>
+            <div class="rules-content">
+                <div class="rule-box">
+                    <h3>Quy định chung</h3>
+                    <ul>
+                        <li>Giữ gìn vệ sinh, không mang đồ ăn vào thư viện</li>
+                        <li>Giữ yên lặng, tắt điện thoại</li>
+                        <li>Cư xử lịch sự, tôn trọng người khác</li>
+                    </ul>
                 </div>
+
+                <div class="rule-box">
+                    <h3>Mượn sách</h3>
+                    <ul>
+                        <li>Mỗi học sinh được mượn tối đa 3 cuốn</li>
+                        <li>Thời gian mượn: 14 ngày</li>
+                        <li>Trả sách đúng hạn</li>
+                    </ul>
+                </div>
+
+                <div class="rule-box">
+                    <h3>Trách nhiệm</h3>
+                    <ul>
+                        <li>Giữ gìn sách sạch sẽ</li>
+                        <li>Không viết vẽ lên sách</li>
+                        <li>Bồi thường nếu làm mất hoặc hư hỏng</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📖 DANH MỤC SÁCH</h2>
+            <div class="search-bar">
+                <select id="categoryFilter" onchange="render()">
+                    <option value="">Tất cả</option>
+                    <option value="Toán học">Toán học</option>
+                    <option value="Tiếng Anh">Tiếng Anh</option>
+                    <option value="Lịch sử">Lịch sử</option>
+                    <option value="Hình học">Hình học</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm sách..." oninput="render()">
             </div>
             <div class="books-grid" id="booksGrid"></div>
         </div>
 
         <div class="my-books" id="myBooks">
-            <h2 style="margin-bottom: 20px;">📚 Sách đã mượn</h2>
+            <h2 class="section-title">📚 SÁCH ĐÃ MƯỢN</h2>
             <ul class="borrowed-list" id="borrowedList"></ul>
         </div>
     </div>
 
     <script>
-        const books = [{
-            id: 1,
-            title: 'Trắc nghiệm Nâng cao Nón Trụ Cầu',
-            author: 'Nhà Sách Miễn Phí',
-            category: 'Hình học',
-            cover: '📐',
-            pdfUrl: 'https://file.nhasachmienphi.com/pdf/nhasachmienphi-trac-nghiem-nang-cao-non-tru-cau.pdf'
-        }, {
-            id: 2,
-            title: 'Tổng hợp Trắc nghiệm Tiếng Anh 10',
-            author: 'Nhà Sách Miễn Phí',
-            category: 'Tiếng Anh',
-            cover: '📚',
-            pdfUrl: 'https://file.nhasachmienphi.com/pdf/nhasachmienphi-tong-hop-bai-tap-trac-nghiem-tieng-anh-10-co-dap-an.pdf'
-        }, {
-            id: 3,
-            title: '25 Bài tập Tiếng Anh 11',
-            author: 'Nhà Sách Miễn Phí',
-            category: 'Tiếng Anh',
-            cover: '📖',
-            pdfUrl: 'https://file.nhasachmienphi.com/pdf/nhasachmienphi-25-bai-tap-trac-nghiem-tieng-anh-11.pdf'
-        }, {
-            id: 4,
-            title: 'Thủ thuật Casio Toán 12',
-            author: 'Nhà Sách Miễn Phí',
-            category: 'Toán học',
-            cover: '🔢',
-            pdfUrl: 'https://file.nhasachmienphi.com/pdf/nhasachmienphi-thu-thuat-casio-giai-nhanh-trac-nghiem-toan-12.pdf'
-        }, {
-            id: 5,
-            title: '1260 Câu hỏi Lịch sử lớp 12',
-            author: 'Nhà Sách Miễn Phí',
-            category: 'Lịch sử',
-            cover: '📜',
-            pdfUrl: 'https://file.nhasachmienphi.com/pdf/nhasachmienphi-1260-cau-hoi-trac-nghiem-lich-su-lop-12-co-dap-an.pdf'
-        }];
+        const books = [
+            {id: 1, title: 'Trắc nghiệm Nâng cao Nón Trụ Cầu', author: 'Nhà Sách Miễn Phí', category: 'Hình học', icon: '📐', total: 5, available: 5},
+            {id: 2, title: 'Tổng hợp Trắc nghiệm Tiếng Anh 10', author: 'Nhà Sách Miễn Phí', category: 'Tiếng Anh', icon: '📚', total: 8, available: 8},
+            {id: 3, title: '25 Bài tập Tiếng Anh 11', author: 'Nhà Sách Miễn Phí', category: 'Tiếng Anh', icon: '📖', total: 6, available: 6},
+            {id: 4, title: 'Thủ thuật Casio Toán 12', author: 'Nhà Sách Miễn Phí', category: 'Toán học', icon: '🔢', total: 4, available: 4},
+            {id: 5, title: '1260 Câu hỏi Lịch sử lớp 12', author: 'Nhà Sách Miễn Phí', category: 'Lịch sử', icon: '📜', total: 3, available: 3}
+        ];
 
-        let users = JSON.parse(localStorage.getItem('users') || '[]');
-        let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-        let borrowedBooks = JSON.parse(localStorage.getItem('borrowedBooks') || '[]');
+        let user = null;
+        let borrowed = [];
+        let pending = []; 
 
         function render() {
             const search = document.getElementById('searchInput').value.toLowerCase();
             const cat = document.getElementById('categoryFilter').value;
-
-            const filtered = books.filter(b => {
-                const matchSearch = b.title.toLowerCase().includes(search);
-                const matchCat = !cat || b.category === cat;
-                return matchSearch && matchCat;
-            });
+            const filtered = books.filter(b => b.title.toLowerCase().includes(search) && (!cat || b.category === cat));
 
             document.getElementById('booksGrid').innerHTML = filtered.map(b => {
-                        const borrowed = borrowedBooks.includes(b.id);
-                        return `
+                const myBorrow = borrowed.find(x => x.id === b.id);
+                const isPending = pending.includes(b.id);
+                
+                return `
                     <div class="book-card">
                         <div class="book-cover">
-                            ${b.cover}
-                            <div class="book-category">${b.category}</div>
+                            ${b.icon}
+                            <div class="book-tag">${b.category}</div>
+                            <div class="book-qty">${b.available}/${b.total}</div>
                         </div>
                         <div class="book-info">
                             <div class="book-title">${b.title}</div>
                             <div class="book-author">${b.author}</div>
-                            <span class="book-status ${borrowed ? 'status-borrowed' : 'status-available'}">
-                                ${borrowed ? '✗ Đã mượn' : '✓ Có sẵn'}
-                            </span>
-                            <div class="book-actions">
-                                <button class="btn-action btn-read" onclick="readBook(${b.id})" ${!currentUser ? 'disabled' : ''}>
-                                    ${!currentUser ? '🔒' : '📖'} Đọc
-                                </button>
-                                ${borrowed ? `
-                                    <button class="btn-action btn-return" onclick="returnBook(${b.id})">↩️ Trả</button>
-                                ` : `
-                                    <button class="btn-action btn-borrow" onclick="borrowBook(${b.id})" ${!currentUser ? 'disabled' : ''}>
-                                        ${!currentUser ? '🔒' : '📚'} Mượn
-                                    </button>
-                                `}
+                            <div class="book-quantity">Còn lại: ${b.available} cuốn</div>
+                            ${isPending ? '<div class="status-pending">Chờ xác nhận</div>' : ''}
+                            <div class="book-buttons">
+                                ${myBorrow ? 
+                                    `<button class="btn-cancel" onclick="cancelBorrow(${b.id})" ${isPending ? 'disabled' : ''}>Hủy mượn</button>` :
+                                    `<button class="btn-borrow" onclick="borrowBook(${b.id})" ${!user || b.available === 0 ? 'disabled' : ''}>Mượn sách</button>`
+                                }
                             </div>
                         </div>
                     </div>
                 `;
             }).join('');
 
-            if (currentUser) {
+            if (user) {
                 document.getElementById('loginBtn').style.display = 'none';
-                document.getElementById('registerBtn').style.display = 'none';
                 document.getElementById('logoutBtn').style.display = 'block';
                 document.getElementById('userInfo').classList.add('active');
-                document.getElementById('userName').textContent = currentUser.name;
-                document.getElementById('userAvatar').textContent = currentUser.name[0];
+                document.getElementById('userInfo').textContent = user;
                 document.getElementById('myBooks').classList.add('active');
                 
-                document.getElementById('borrowedList').innerHTML = borrowedBooks.length ? borrowedBooks.map(id => {
-                    const b = books.find(x => x.id === id);
-                    return `
-                        <li class="borrowed-item">
-                            <div><h4>${b.cover} ${b.title}</h4><p>${b.category}</p></div>
-                            <button class="btn-action btn-return" onclick="returnBook(${id})">↩️ Trả</button>
-                        </li>
-                    `;
-                }).join('') : '<li style="padding:20px;text-align:center;color:#999">Chưa mượn sách nào</li>';
+                document.getElementById('borrowedList').innerHTML = borrowed.length ? 
+                    borrowed.map(x => {
+                        const b = books.find(book => book.id === x.id);
+                        const isPending = pending.includes(x.id);
+                        return `
+                            <li class="borrowed-item">
+                                <div>
+                                    <h4>${b.icon} ${b.title}</h4>
+                                    <p>${b.category} • Ngày mượn: ${x.date}</p>
+                                    ${isPending ? '<p style="color:#856404;font-weight:bold;">⏳ Chờ xác nhận trả sách</p>' : ''}
+                                </div>
+                                <button class="btn-return" onclick="returnBook(${x.id})" ${isPending ? 'disabled' : ''}>Trả sách</button>
+                            </li>
+                        `;
+                    }).join('') : 
+                    '<li style="padding:20px;text-align:center;color:#999">Chưa mượn sách nào</li>';
             } else {
                 document.getElementById('loginBtn').style.display = 'block';
-                document.getElementById('registerBtn').style.display = 'block';
                 document.getElementById('logoutBtn').style.display = 'none';
                 document.getElementById('userInfo').classList.remove('active');
                 document.getElementById('myBooks').classList.remove('active');
             }
         }
 
+        function showLogin() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function hideLogin() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function login(e) {
+            e.preventDefault();
+            const code = document.getElementById('studentCode').value.trim();
+            if (code.length < 3) {
+                alert('Mã số không hợp lệ!');
+                return;
+            }
+            user = code;
+            hideLogin();
+            document.getElementById('studentCode').value = '';
+            alert('Chào mừng ' + code + '!');
+            render();
+        }
+
+        function logout() {
+            if (confirm('Bạn có chắc muốn đăng xuất?')) {
+                user = null;
+                borrowed = [];
+                pending = [];
+                alert('Đã đăng xuất!');
+                render();
+            }
+        }
+
         function borrowBook(id) {
-            if (!currentUser) return alert('Vui lòng đăng nhập!');
-            if (borrowedBooks.includes(id)) return alert('Đã mượn rồi!');
-            borrowedBooks.push(id);
-            localStorage.setItem('borrowedBooks', JSON.stringify(borrowedBooks));
+            if (!user) {
+                alert('Vui lòng đăng nhập!');
+                return;
+            }
+            const book = books.find(b => b.id === id);
+            if (book.available === 0) {
+                alert('Sách đã hết!');
+                return;
+            }
+            if (borrowed.find(b => b.id === id)) {
+                alert('Bạn đã mượn sách này rồi!');
+                return;
+            }
+            if (borrowed.length >= 3) {
+                alert('Bạn chỉ được mượn tối đa 3 cuốn!');
+                return;
+            }
+            
+            book.available--;
+            const today = new Date();
+            borrowed.push({
+                id: id,
+                date: today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear()
+            });
             alert('Mượn sách thành công!');
             render();
         }
 
         function returnBook(id) {
-            borrowedBooks = borrowedBooks.filter(x => x !== id);
-            localStorage.setItem('borrowedBooks', JSON.stringify(borrowedBooks));
-            alert('Trả sách thành công!');
-            render();
-        }
-
-        function readBook(id) {
-            if (!currentUser) return alert('Vui lòng đăng nhập!');
-            const b = books.find(x => x.id === id);
-            document.getElementById('pdfTitle').textContent = b.title;
-            document.getElementById('pdfFrame').src = b.pdfUrl;
-            document.getElementById('pdfViewer').classList.add('active');
-        }
-
-        document.getElementById('loginBtn').onclick = () => document.getElementById('loginModal').classList.add('active');
-        document.getElementById('registerBtn').onclick = () => document.getElementById('registerModal').classList.add('active');
-        document.getElementById('closeLogin').onclick = () => document.getElementById('loginModal').classList.remove('active');
-        document.getElementById('closeRegister').onclick = () => document.getElementById('registerModal').classList.remove('active');
-        document.getElementById('closePdf').onclick = () => {
-            document.getElementById('pdfViewer').classList.remove('active');
-            document.getElementById('pdfFrame').src = '';
-        };
-        document.getElementById('switchToRegister').onclick = () => {
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('registerModal').classList.add('active');
-        };
-        document.getElementById('switchToLogin').onclick = () => {
-            document.getElementById('registerModal').classList.remove('active');
-            document.getElementById('loginModal').classList.add('active');
-        };
-
-        document.getElementById('loginForm').onsubmit = (e) => {
-            e.preventDefault();
-            const u = document.getElementById('loginUsername').value;
-            const p = document.getElementById('loginPassword').value;
-            const user = users.find(x => x.username === u && x.password === p);
-            if (user) {
-                currentUser = {name: user.name, username: u};
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                document.getElementById('loginModal').classList.remove('active');
-                alert('Đăng nhập thành công!');
+            if (!pending.includes(id)) {
+                pending.push(id);
+                alert('Yêu cầu trả sách đã được gửi! Chờ thủ thư xác nhận.');
                 render();
-            } else {
-                alert('Sai tên đăng nhập hoặc mật khẩu!');
             }
-        };
+        }
 
-        document.getElementById('registerForm').onsubmit = (e) => {
-            e.preventDefault();
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const u = document.getElementById('registerUsername').value;
-            const p = document.getElementById('registerPassword').value;
-            const c = document.getElementById('registerConfirm').value;
-            
-            if (p !== c) return alert('Mật khẩu không khớp!');
-            if (users.find(x => x.username === u)) return alert('Tên đăng nhập đã tồn tại!');
-            if (users.find(x => x.email === email)) return alert('Email đã được sử dụng!');
-            
-            users.push({name, email, username: u, password: p});
-            localStorage.setItem('users', JSON.stringify(users));
-            document.getElementById('registerModal').classList.remove('active');
-            alert('Đăng ký thành công! Vui lòng đăng nhập.');
-            document.getElementById('registerForm').reset();
-        };
-
-        document.getElementById('logoutBtn').onclick = () => {
-            currentUser = null;
-            borrowedBooks = [];
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('borrowedBooks');
-            alert('Đã đăng xuất!');
-            render();
-        };
-
-        document.getElementById('searchInput').oninput = render;
-        document.getElementById('categoryFilter').onchange = render;
+        function cancelBorrow(id) {
+            if (confirm('Bạn có chắc muốn hủy mượn sách này?')) {
+                const book = books.find(b => b.id === id);
+                book.available++;
+                borrowed = borrowed.filter(b => b.id !== id);
+                pending = pending.filter(bookId => bookId !== id);
+                alert('Đã hủy mượn sách!');
+                render();
+            }
+        }
 
         render();
     </script>
